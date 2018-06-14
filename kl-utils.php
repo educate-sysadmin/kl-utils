@@ -65,7 +65,8 @@ class KLUtils {
         }
         
         // query posts
-        $sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND term_taxonomy_id = '.$category_id;  
+        //$sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND term_taxonomy_id = '.$category_id;          
+        $sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships, '.$wpdb->prefix. 'term_taxonomy WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND '.$wpdb->prefix. 'term_taxonomy.term_taxonomy_id = '.$wpdb->prefix.'term_relationships.term_taxonomy_id AND term_id = '.$category_id;
         $result = $wpdb->get_results($sql);
         $posts = array();
         foreach ($result as $row) {
