@@ -68,16 +68,27 @@ try {
                 // lookup category id
                 $category_id = KLUtils::get_category_id($category);
                 
-                // query posts
-                //$sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND term_taxonomy_id = '.$category_id;          
-                $sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships, '.$wpdb->prefix. 'term_taxonomy WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND '.$wpdb->prefix. 'term_taxonomy.term_taxonomy_id = '.$wpdb->prefix.'term_relationships.term_taxonomy_id AND term_id = '.$category_id;
-                $result = $wpdb->get_results($sql);
+                // find posts and pages in category 
+                // ref https://codex.wordpress.org/Function_Reference/get_pages but using get_posts
+                $args = array(
+	                'post_type' => array('page','post'),
+	                'post_status' => 'publish',
+                   'cat'=> $category_id
+                ); 
+                $posts_objects = get_posts($args); 
+                
+                // extract post ids
                 $posts = array();
-                foreach ($result as $row) {
-                    $posts[] = $row->ID;
+                foreach ($posts_objects as $posts_object) {
+                    $posts[] = $posts_object->ID;
                 }
                 
                 return $posts;
+                
+                // query for older wp for reference
+                //$sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND term_taxonomy_id = '.$category_id;          
+                // query for wp circa 4.9.6 for reference
+                //$sql = 'SELECT ID,post_title FROM '.$wpdb->prefix.'posts, '.$wpdb->prefix.'term_relationships, '.$wpdb->prefix. 'term_taxonomy WHERE object_id = ID AND (post_type = "page" OR post_type="post") AND '.$wpdb->prefix. 'term_taxonomy.term_taxonomy_id = '.$wpdb->prefix.'term_relationships.term_taxonomy_id AND term_id = '.$category_id;                
             }
             
             /* add role(s) to all posts in category */
