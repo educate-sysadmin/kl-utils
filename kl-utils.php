@@ -161,8 +161,9 @@ try {
                 $user_roles = members_get_user_role_names( $user_id );
                 $category_roles = KLUtils::get_category_roles($category);
                 foreach ($category_roles as $category_role) {
-                    foreach ($user_roles as $user_role) {            
-                        if (strtolower($category_role) == strtolower($user_role)) {
+                    foreach ($user_roles as $user_role_key => $user_role_val) {
+                        // match either role title or role name
+                        if (strtolower($category_role) == strtolower($user_role_key) || strtolower($category_role) == strtolower($user_role_val)) {
                             return true;
                         }
                     }
