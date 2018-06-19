@@ -3,7 +3,7 @@
 Plugin Name: KL Utils
 Plugin URI: https://github.com/educate-sysadmin/kl-utils
 Description: General Wordpress utility functions
-Version: 0.2.1
+Version: 0.2.2
 Author: b.cunningham@ucl.ac.uk
 Author URI: https://educate.london
 License: GPL2
